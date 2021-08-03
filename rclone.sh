@@ -9,6 +9,7 @@ LOGFILE="/root/rclone-mount-check.log"
 RCLONEREMOTE="w89:plnfteu90"
 MPOINT="/wasabi"
 CHECKFILE="rclone.conf"
+CHECKFILEPATH="/root/rclone/rclone.conf"
 
 if pidof -o %PPID -x "$0"; then
     echo "$(date "+%d.%m.%Y %T") EXIT: Already running." | tee -a "$LOGFILE"
@@ -36,6 +37,7 @@ else
     rclone mount \
         --allow-non-empty \
         $RCLONEREMOTE $MPOINT &
+        rclone copy $CHECKFILEPATH $RCLONEREMOTE &
 
     while ! mount | grep "on ${MPOINT} type" > /dev/null
     do
